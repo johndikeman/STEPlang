@@ -7,7 +7,7 @@ reserved_methods = ['pause','output', 'input', 'sto', 'dupe' ,'+', '-', '/', '*'
 
 global global_index
 parser = ArgumentParser()
-parser.add_argument('file',help='the path to the johnscript file')
+parser.add_argument('file',help='the path to the step file')
 
 class StepSyntaxError(Exception):
 	def __init__(self,message):
