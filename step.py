@@ -1,11 +1,11 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from argparse import ArgumentParser
 import sys, copy, os, glob, time
 
-reserved_methods = ['pause','output', 'input', 'sto', 'dupe' ,'+', '-', '/', '*', '%', '?', 'goto', 'end', 'rand', '>', '<', '==', "!="]
+reserved_methods = ['pause','output', 'input', 'finput', 'sto', 'dupe' ,'+', '-', '/', '*', '%', '?', 'goto', 'end', 'rand', '>', '<', '==', "!="]
 
-global global_index
 parser = ArgumentParser()
 parser.add_argument('file',help='the path to the step file')
 
@@ -54,7 +54,7 @@ class Interpreter:
 					self.li.index('.'+str(self.global_index))
 					self.execute(self.li.index(str(self.global_index)+'.'),self.li.index('.'+str(self.global_index)))
 				except ValueError as e:
-					raise StepSyntaxError('you forgot to close operation %d!!' % self.global_index)	
+					raise StepSyntaxError('you forgot to close operation %d!!' % self.global_index)
 			except ValueError as e:
 				pass
 			self.global_index += 1
@@ -71,7 +71,7 @@ class Interpreter:
 				self.memory.append(self.li[index])
 				# print 'SOMETHING STORED'
 			elif self.li[index] == 'output':
-				sys.stdout.write(str(self.memory.pop()+'\n'))
+				sys.stdout.write(str(self.memory.pop())+'\n')
 				# print 'OUTPUT CALLED'
 			elif self.li[index] == 'goto':
 				test = self.memory.pop()
@@ -116,6 +116,11 @@ class Interpreter:
 					self.memory.append('nope')
 			elif self.li[index] == 'input':
 				self.memory.append(raw_input())
+			elif self.li[index] == 'finput':
+				try:
+					self.memory.append(int(raw_input()))
+				except ValueError:
+					raise StepSyntaxError('finput requires you to input a number!!')
 			elif self.li[index] == 'dupe':
 				self.memory.append(self.memory[len(self.memory)-1])
 			elif self.li[index] == 'pause':
